@@ -1,4 +1,7 @@
-# courier
+# Courier
+
+![Status](https://img.shields.io/badge/status-developing-green.svg)
+
 WhatsApp-based app to work with web socket protocol in React Native and Node
 
 ---
