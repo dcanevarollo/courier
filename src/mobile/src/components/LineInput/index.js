@@ -1,10 +1,19 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
+import { TextInputMask } from 'react-native-masked-text';
 import { useField } from '@unform/core';
 
-import { Container, Border, TextInput, Label } from './styles';
+import { Container, Border, TextInput, Label, Error } from './styles';
 import colors from '../../styles/colors';
 
-export default function LineInput({ name, label, width = '100%', ...rest }) {
+export default function LineInput({
+  name,
+  label,
+  width = '100%',
+  hasMask,
+  onChangeText,
+  rawValue,
+  ...rest
+}) {
   const inputRef = useRef(null);
 
   const {
@@ -49,7 +58,7 @@ export default function LineInput({ name, label, width = '100%', ...rest }) {
         inputRef.current.value = value;
       },
       getValue(ref) {
-        return ref.value;
+        return rawValue || ref.value;
       },
     });
   }, [fieldName, registerField]);
@@ -59,6 +68,19 @@ export default function LineInput({ name, label, width = '100%', ...rest }) {
     else if (valid) setBorderColors([colors.gray, colors.gray]);
     else setBorderColors([colors.lightGray, colors.lightGray]);
   }, [active]);
+
+  useEffect(() => {
+    if (error) setBorderColors([colors.red, colors.red]);
+  }, [error]);
+
+  const handleOnChange = useCallback(
+    (text) => {
+      if (inputRef.current) inputRef.current.value = text;
+
+      if (onChangeText) onChangeText(text);
+    },
+    [onChangeText]
+  );
 
   return (
     <Container width={width}>
@@ -72,24 +94,43 @@ export default function LineInput({ name, label, width = '100%', ...rest }) {
         keyboardAppearance="dark"
         defaultValue={defaultValue}
         style={{ includeFontPadding: true, textAlignVertical: 'center' }}
+        placeholderTextColor={error ? colors.red : colors.lightGray}
         onFocus={() => {
           clearError();
           setActive(true);
         }}
         onBlue={() => setActive(false)}
-        onChangeText={(value) => {
-          if (inputRef.current) {
-            inputRef.current.value = value;
-          }
-        }}
+        onChangeText={handleOnChange}
         {...rest}
       />
       <Border
-        width={width}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
         colors={borderColors}
       />
+      {error && <Error>{error}</Error>}
     </Container>
+  );
+}
+
+export function MaskedInput({ type, ...rest }) {
+  const [value, setValue] = useState('');
+  const [rawValue, setRawValue] = useState('');
+
+  const handleOnChangeText = useCallback((maskedValue, unmaskedValue) => {
+    setValue(maskedValue);
+    setRawValue(unmaskedValue);
+  }, []);
+
+  return (
+    <TextInputMask
+      type={type}
+      includeRawValueInChangeText
+      value={value}
+      onChangeText={handleOnChangeText}
+      customTextInput={LineInput}
+      customTextInputProps={{ rawValue, ...rest }}
+      {...rest}
+    />
   );
 }

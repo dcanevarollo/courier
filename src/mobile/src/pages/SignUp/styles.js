@@ -1,6 +1,7 @@
 import styled from 'styled-components/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Form as Unform } from '@unform/mobile';
+import { Picker } from '@react-native-community/picker';
 
 import { Regular, SemiBold, Bold } from '../../styles/fonts';
 import colors from '../../styles/colors';
@@ -34,6 +35,25 @@ export const Form = styled(Unform)`
   width: 100%;
 `;
 
+export const PickerBox = styled(Picker)`
+  width: 100%;
+  height: 50px;
+  font-size: 20px;
+`;
+
+export const PickerLine = styled.View`
+  width: 100%;
+  height: 2px;
+  margin-bottom: 10px;
+  background: ${colors.lightGray};
+`;
+
+export const InputsRow = styled.View`
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
 export const ControlsContainer = styled.View`
   width: 100%;
   flex-direction: row;
@@ -43,5 +63,5 @@ export const ControlsContainer = styled.View`
 export const ControlLink = styled(SemiBold)`
   font-size: 20px;
   line-height: 25px;
-  color: ${(props) => props.color || colors.darkGray};
+  color: ${(props) => (props.advance ? colors.primaryBlue : colors.darkGray)};
 `;

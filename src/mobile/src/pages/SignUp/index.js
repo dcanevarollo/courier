@@ -1,9 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
+import { Picker } from '@react-native-community/picker';
+import { ValidationError } from 'yup';
 
-import PickerBox from '../../components/PickerBox';
-import LineInput from '../../components/LineInput';
+import countriesJSON from '../../utils/countries.json';
+
+import { firstStepValidator } from '../../validators/signUp';
+
+import LineInput, { MaskedInput } from '../../components/LineInput';
 
 import {
   Container,
@@ -11,10 +16,12 @@ import {
   PageSubtitle,
   FormContainer,
   Form,
+  PickerBox,
+  PickerLine,
+  InputsRow,
   ControlsContainer,
   ControlLink,
 } from './styles';
-import colors from '../../styles/colors';
 
 export default function SignUp({ navigation }) {
   const formRef = useRef(null);
@@ -22,23 +29,31 @@ export default function SignUp({ navigation }) {
   const [step, setStep] = useState(0);
   const [subtitle, setSubtitle] = useState('');
   const [data, setData] = useState({});
-  const [selectedItem, setSelectedItem] = useState({}); // For Picker
+
+  // For Picker options
+  const [countries, setCountries] = useState([
+    { value: '', label: 'Choose...' },
+  ]);
+  const [countryCode, setCountryCode] = useState('');
+
+  // Controls inputs enabling
+  const [editable, setEditable] = useState(false);
 
   useEffect(() => {
     switch (step) {
       case 0: {
-        setSubtitle(
-          'Informe seu número de telefone para iniciar o processo de cadastro.'
-        );
+        setSubtitle('Hi! Please, inform your phone number to sign up.');
         break;
       }
       case 1: {
-        setSubtitle('Qual seu nome? Se quiser, fale um pouco sobre você... ');
+        setSubtitle(
+          'What is your name? If you like, tell me a little about you... '
+        );
         break;
       }
       case 2: {
         setSubtitle(
-          'Agora, se desejar, escolha uma foto para que seus amigos te vejam!'
+          'Now, if you want, choose a nice picture for your friends see who you are!'
         );
         break;
       }
@@ -47,6 +62,22 @@ export default function SignUp({ navigation }) {
     }
   }, [step]);
 
+  useEffect(() => {
+    if (countryCode !== '') {
+      formRef.current.setFieldValue('dial_code', countryCode);
+
+      setEditable(true);
+    } else setEditable(false);
+  }, [countryCode]);
+
+  useEffect(() => {
+    const countriesData = countriesJSON.map((country) => {
+      return { value: country.dial_code, label: country.name };
+    });
+
+    setCountries([...countries, ...countriesData]);
+  }, []);
+
   /**
    * Controls step transitions for the form. In the final step, it will submit
    * the form.
@@ -54,38 +85,52 @@ export default function SignUp({ navigation }) {
    * @param {String} direction  case 'back' return to step before; case
    *                            'forward' advances to next step
    */
-  function changeStep(direction) {
+  function handleStepChange(direction) {
+    /**
+     * Validate the current step data and advance.
+     *
+     * @param {Object} newData    current step data
+     * @param {Schema} validator  current step validator
+     */
+    async function verifyStep(newData, validator) {
+      try {
+        await validator.validate(newData, { abortEarly: false });
+
+        formRef.current.setErrors({});
+
+        setData({ ...data, ...newData });
+        setStep(step + 1);
+      } catch (error) {
+        if (error instanceof ValidationError) {
+          const errors = {};
+
+          error.inner.forEach((err) => {
+            errors[err.path] = err.message;
+          });
+
+          formRef.current.setErrors(errors);
+        }
+      }
+    }
+
     if (direction === 'back') {
       if (step === 0) navigation.goBack();
       else setStep(step - 1);
     } else if (step < 2) {
-      setData({ ...data, ...formRef.current.getData() });
-      setStep(step + 1);
+      const newData = formRef.current.getData();
+
+      if (step === 0) verifyStep(newData, firstStepValidator);
     } else formRef.current.submitForm();
   }
 
-  const pickerItems = [
-    { value: 'br', label: 'Brasil' },
-    { value: 'es', label: 'Espanha' },
-    { value: 'eua', label: 'Estados Unidos' },
-  ];
-
-  async function handleSelection(item) {
-    setSelectedItem(item);
-
-    // TODO : fetch countries by an API
-  }
-
-  async function handleSubmit() {
-    console.log(data);
-  }
+  async function handleSubmit() {}
 
   return (
     <Container>
       <StatusBar style="dark" />
 
       <View>
-        <PageTitle>Cadastro</PageTitle>
+        <PageTitle>Sign Up</PageTitle>
         <PageSubtitle>{subtitle}</PageSubtitle>
       </View>
 
@@ -94,11 +139,28 @@ export default function SignUp({ navigation }) {
           {step === 0 && (
             <>
               <PickerBox
-                items={pickerItems}
-                selectedItem={selectedItem}
-                onSelect={handleSelection}
-              />
-              <LineInput name="teste" />
+                selectedValue={countryCode}
+                onValueChange={(item) => setCountryCode(item)}
+              >
+                {countries.map((item) => (
+                  <Picker.Item
+                    key={`${item.value}#${item.label}`}
+                    label={item.label}
+                    value={item.value}
+                  />
+                ))}
+              </PickerBox>
+              <PickerLine />
+              <InputsRow>
+                <LineInput name="dial_code" width="25%" editable={false} />
+                <MaskedInput
+                  name="phone_number"
+                  width="70%"
+                  placeholder="Phone number"
+                  type="cel-phone"
+                  editable={editable}
+                />
+              </InputsRow>
             </>
           )}
         </Form>
@@ -107,15 +169,15 @@ export default function SignUp({ navigation }) {
       <ControlsContainer>
         <TouchableOpacity
           activeOpacity={0.5}
-          onPress={() => changeStep('back')}
+          onPress={() => handleStepChange('back')}
         >
-          <ControlLink>Voltar</ControlLink>
+          <ControlLink>Back</ControlLink>
         </TouchableOpacity>
         <TouchableOpacity
           activeOpacity={0.5}
-          onPress={() => changeStep('forward')}
+          onPress={() => handleStepChange('forward')}
         >
-          <ControlLink color={colors.primaryBlue}>Próximo</ControlLink>
+          <ControlLink advance>Next</ControlLink>
         </TouchableOpacity>
       </ControlsContainer>
     </Container>

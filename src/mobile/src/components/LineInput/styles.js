@@ -1,7 +1,7 @@
 import styled from 'styled-components/native';
 import { LinearGradient } from 'expo-linear-gradient';
 
-import { SemiBold } from '../../styles/fonts';
+import { Regular, SemiBold } from '../../styles/fonts';
 import colors from '../../styles/colors';
 
 export const Container = styled.View`
@@ -39,6 +39,15 @@ export const TextInput = styled.TextInput`
 `;
 
 export const Border = styled(LinearGradient)`
-  width: ${(props) => props.width};
+  width: 100%;
   height: 2px;
+`;
+
+export const Error = styled(Regular)`
+  position: absolute;
+  right: 0;
+  bottom: -22px;
+  font-size: 14px;
+  line-height: 15px;
+  color: ${colors.red};
 `;

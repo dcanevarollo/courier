@@ -15,13 +15,13 @@ export default function Welcome({ navigation }) {
 
       <Header>
         <Logo source={logo} />
-        <Greeting>Olá!</Greeting>
-        <Salutation>Bem-vindo ao Courier!</Salutation>
+        <Greeting>Hello!</Greeting>
+        <Salutation>Welcome to Courier!</Salutation>
       </Header>
 
       <OutlineButton
         color="white"
-        label="iniciar"
+        label="start"
         width="260px"
         onPress={() => navigation.navigate('SignUp')}
       />

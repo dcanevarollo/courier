@@ -11,6 +11,9 @@ import { NavigationContainer } from '@react-navigation/native';
 
 import Routes from './Routes';
 
+// eslint-disable-next-line no-console
+console.disableYellowBox = true;
+
 export default function App() {
   const [fontsLoaded] = useFonts({
     SourceSansPro_400Regular,
