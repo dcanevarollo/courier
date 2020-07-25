@@ -24,12 +24,14 @@
   },
   "dependencies": {
     "@adonisjs/ace": "^6.0.0",
+    "@adonisjs/auth": "^4.2.4",
     "@adonisjs/core": "^5.0.0-preview-rc",
     "@adonisjs/fold": "^6.0.0",
     "@adonisjs/lucid": "^8.2.2",
     "pg": "^8.3.0",
     "proxy-addr": "^2.0.6",
     "reflect-metadata": "^0.1.13",
+    "slugify": "^1.4.4",
     "source-map-support": "^0.5.19"
   }
 }

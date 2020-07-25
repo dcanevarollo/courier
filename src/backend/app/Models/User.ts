@@ -8,9 +8,11 @@ import {
   ManyToMany,
   hasOne,
   HasOne,
+  beforeSave,
 } from '@ioc:Adonis/Lucid/Orm';
 import Conversation from './Conversation';
 import File from './File';
+import Hash from '@ioc:Adonis/Core/Hash';
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
@@ -20,7 +22,13 @@ export default class User extends BaseModel {
   public name: string;
 
   @column()
-  public phoneNumber: string;
+  public phone: string;
+
+  @column({ serializeAs: null })
+  public phoneSlug: string;
+
+  @column({ serializeAs: null })
+  public password: string;
 
   @column()
   public about: string;
@@ -42,4 +50,9 @@ export default class User extends BaseModel {
 
   @hasOne(() => File)
   public picture: HasOne<typeof File>;
+
+  @beforeSave()
+  public static async hashPassword(user: User) {
+    if (user.$dirty.password) user.password = await Hash.hash(user.password);
+  }
 }
