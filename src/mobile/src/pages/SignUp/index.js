@@ -1,6 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
+import { SimpleLineIcons as Icon } from '@expo/vector-icons';
+import * as ImagePicker from 'expo-image-picker';
+import * as Permissions from 'expo-permissions';
+import Constants from 'expo-constants';
 import { Picker } from '@react-native-community/picker';
 import { ValidationError } from 'yup';
 
@@ -24,23 +28,41 @@ import {
   InputsRow,
   ControlsContainer,
   ControlLink,
+  PictureBorder,
+  Picture,
 } from './styles';
+import colors from '../../styles/colors';
 
 export default function SignUp({ navigation }) {
   const formRef = useRef(null);
 
+  // User picture choice
+  const [picture, setPicture] = useState(null);
+
+  async function handleChoosePicture() {
+    if (Constants.platform.ios) {
+      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+
+      if (status !== 'granted') return;
+    }
+
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+
+      if (!result.cancelled) setPicture(result.uri);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  // Step visualization items
   const [step, setStep] = useState(0);
   const [subtitle, setSubtitle] = useState('');
-  const [data, setData] = useState({});
-
-  // For Picker options
-  const [countries, setCountries] = useState([
-    { value: '', label: 'Choose...' },
-  ]);
-  const [countryCode, setCountryCode] = useState('');
-
-  // Controls inputs enabling
-  const [editable, setEditable] = useState(false);
 
   useEffect(() => {
     switch (step) {
@@ -65,6 +87,15 @@ export default function SignUp({ navigation }) {
     }
   }, [step]);
 
+  // For Picker options
+  const [countries, setCountries] = useState([
+    { value: '', label: 'Choose...' },
+  ]);
+  const [countryCode, setCountryCode] = useState('');
+
+  // Controls inputs enabling
+  const [editable, setEditable] = useState(false);
+
   useEffect(() => {
     if (countryCode !== '') {
       formRef.current.setFieldValue('dial_code', countryCode);
@@ -80,6 +111,8 @@ export default function SignUp({ navigation }) {
 
     setCountries([...countries, ...countriesData]);
   }, []);
+
+  const [data, setData] = useState({});
 
   /**
    * Controls step transitions for the form. In the final step, it will submit
@@ -126,10 +159,6 @@ export default function SignUp({ navigation }) {
       else if (step === 1) verifyStep(newData, secondStepValidator);
     } else formRef.current.submitForm();
   }
-
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
 
   async function handleSubmit() {}
 
@@ -182,7 +211,28 @@ export default function SignUp({ navigation }) {
               <LineInput name="about" label="About me" />
             </>
           ) : (
-            <></>
+            <>
+              <PictureBorder
+                colors={[colors.primaryGreen, colors.primaryBlue]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+              >
+                <TouchableOpacity
+                  activeOpacity={0.5}
+                  onPress={handleChoosePicture}
+                >
+                  <Picture source={{ uri: picture }}>
+                    {!picture && (
+                      <Icon
+                        name="camera"
+                        size={60}
+                        color={colors.primaryBlue}
+                      />
+                    )}
+                  </Picture>
+                </TouchableOpacity>
+              </PictureBorder>
+            </>
           )}
         </Form>
       </FormContainer>
@@ -195,7 +245,7 @@ export default function SignUp({ navigation }) {
           <ControlLink>Back</ControlLink>
         </TouchableOpacity>
         <TouchableOpacity
-          activeOpacity={0.5}
+          activeOpacity={0.9}
           onPress={() => handleStepChange('forward')}
         >
           <ControlLink advance>{step < 2 ? 'Next' : 'Done!'}</ControlLink>
