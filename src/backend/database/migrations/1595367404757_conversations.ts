@@ -7,19 +7,19 @@ export default class Conversations extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.uuid('id').primary().defaultTo(this.raw('uuid_generate_v4()'));
       table
-        .uuid('user1_id')
+        .uuid('sender_id')
         .references('id')
         .inTable('users')
         .onUpdate('cascade')
         .onDelete('set null');
       table
-        .uuid('user2_id')
+        .uuid('receiver_id')
         .references('id')
         .inTable('users')
         .onUpdate('cascade')
         .onDelete('set null');
       table.timestamps(true);
-      table.unique(['user1_id', 'user2_id']);
+      table.unique(['sender_id', 'receiver_id']);
     });
   }
 
