@@ -6,7 +6,10 @@ import { ValidationError } from 'yup';
 
 import countriesJSON from '../../utils/countries.json';
 
-import { firstStepValidator } from '../../validators/signUp';
+import {
+  firstStepValidator,
+  secondStepValidator,
+} from '../../validators/signUp';
 
 import LineInput, { MaskedInput } from '../../components/LineInput';
 
@@ -47,7 +50,7 @@ export default function SignUp({ navigation }) {
       }
       case 1: {
         setSubtitle(
-          'What is your name? If you like, tell me a little about you... '
+          'What is your name? If you like, tell me a little about you...'
         );
         break;
       }
@@ -94,7 +97,7 @@ export default function SignUp({ navigation }) {
      */
     async function verifyStep(newData, validator) {
       try {
-        await validator.validate(newData, { abortEarly: false });
+        if (validator) await validator.validate(newData, { abortEarly: false });
 
         formRef.current.setErrors({});
 
@@ -120,8 +123,13 @@ export default function SignUp({ navigation }) {
       const newData = formRef.current.getData();
 
       if (step === 0) verifyStep(newData, firstStepValidator);
+      else if (step === 1) verifyStep(newData, secondStepValidator);
     } else formRef.current.submitForm();
   }
+
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
 
   async function handleSubmit() {}
 
@@ -136,7 +144,7 @@ export default function SignUp({ navigation }) {
 
       <FormContainer>
         <Form ref={formRef} onSubmit={handleSubmit} initialData={data}>
-          {step === 0 && (
+          {step === 0 ? (
             <>
               <PickerBox
                 selectedValue={countryCode}
@@ -152,16 +160,29 @@ export default function SignUp({ navigation }) {
               </PickerBox>
               <PickerLine />
               <InputsRow>
-                <LineInput name="dial_code" width="25%" editable={false} />
+                <LineInput
+                  name="dial_code"
+                  width="25%"
+                  placeholder="+"
+                  editable={false}
+                />
                 <MaskedInput
                   name="phone_number"
                   width="70%"
                   placeholder="Phone number"
                   type="cel-phone"
+                  options={{ withDDD: countryCode === '+55', dddMask: '99 ' }}
                   editable={editable}
                 />
               </InputsRow>
             </>
+          ) : step === 1 ? (
+            <>
+              <LineInput name="name" label="Name" />
+              <LineInput name="about" label="About me" />
+            </>
+          ) : (
+            <></>
           )}
         </Form>
       </FormContainer>
@@ -177,7 +198,7 @@ export default function SignUp({ navigation }) {
           activeOpacity={0.5}
           onPress={() => handleStepChange('forward')}
         >
-          <ControlLink advance>Next</ControlLink>
+          <ControlLink advance>{step < 2 ? 'Next' : 'Done!'}</ControlLink>
         </TouchableOpacity>
       </ControlsContainer>
     </Container>

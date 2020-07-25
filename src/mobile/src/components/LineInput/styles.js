@@ -16,11 +16,9 @@ export const Container = styled.View`
 export const Label = styled(SemiBold)`
   position: absolute;
   text-transform: capitalize;
-  left: ${(props) => (props.active || props.valid || props.error ? 0 : '10px')};
-  top: ${(props) =>
-    props.active || props.valid || props.error ? '-12px' : '12px'};
-  font-size: ${(props) =>
-    props.active || props.valid || props.error ? '14px' : '20px'};
+  left: ${(props) => (props.active || props.valid ? 0 : '10px')};
+  top: ${(props) => (props.active || props.valid ? '-12px' : '12px')};
+  font-size: ${(props) => (props.active || props.valid ? '14px' : '20px')};
   color: ${(props) =>
     props.active
       ? colors.primaryBlue

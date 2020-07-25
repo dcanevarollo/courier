@@ -9,7 +9,6 @@ export default function LineInput({
   name,
   label,
   width = '100%',
-  hasMask,
   onChangeText,
   rawValue,
   ...rest
@@ -75,6 +74,9 @@ export default function LineInput({
 
   const handleOnChange = useCallback(
     (text) => {
+      if (text !== '') setValid(true);
+      else setValid(false);
+
       if (inputRef.current) inputRef.current.value = text;
 
       if (onChangeText) onChangeText(text);
@@ -94,12 +96,12 @@ export default function LineInput({
         keyboardAppearance="dark"
         defaultValue={defaultValue}
         style={{ includeFontPadding: true, textAlignVertical: 'center' }}
-        placeholderTextColor={error ? colors.red : colors.lightGray}
+        placeholderTextColor={error ? colors.red : colors.gray}
         onFocus={() => {
           clearError();
           setActive(true);
         }}
-        onBlue={() => setActive(false)}
+        onBlur={() => setActive(false)}
         onChangeText={handleOnChange}
         {...rest}
       />
