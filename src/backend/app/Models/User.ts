@@ -13,6 +13,7 @@ import {
 import Conversation from './Conversation';
 import File from './File';
 import Hash from '@ioc:Adonis/Core/Hash';
+import ApiToken from './ApiToken';
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
@@ -50,6 +51,9 @@ export default class User extends BaseModel {
 
   @hasOne(() => File)
   public picture: HasOne<typeof File>;
+
+  @hasMany(() => ApiToken)
+  public tokens: HasMany<typeof ApiToken>;
 
   @beforeSave()
   public static async hashPassword(user: User) {
