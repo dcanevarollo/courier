@@ -9,6 +9,7 @@ import {
 } from '@ioc:Adonis/Lucid/Orm';
 import Conversation from './Conversation';
 import User from './User';
+import File from './File';
 
 export default class Message extends BaseModel {
   @column({ isPrimary: true })
@@ -49,4 +50,7 @@ export default class Message extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true, serializeAs: null })
   public updatedAt: DateTime;
+
+  @hasOne(() => File)
+  public file: HasOne<typeof File>;
 }
