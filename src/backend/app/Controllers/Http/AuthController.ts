@@ -7,9 +7,9 @@ export default class AuthController {
 
     const phoneSlug = slugify(phone);
 
-    const token = await auth
-      .use('api')
-      .attempt(phoneSlug, password, { expiresIn: '7 days' });
+    const token = await auth.attempt(phoneSlug, password, {
+      expiresIn: '7 days',
+    });
 
     const { user } = auth;
 
@@ -21,6 +21,6 @@ export default class AuthController {
   }
 
   public async logout({ auth }: HttpContextContract) {
-    await auth.use('api').logout();
+    await auth.logout();
   }
 }

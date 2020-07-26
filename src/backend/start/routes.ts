@@ -14,4 +14,5 @@ Route.group(() => {
   Route.delete('logout', 'AuthController.logout');
   Route.resource('users', 'UsersController').apiOnly().except(['store']);
   Route.post('files', 'FilesController.store');
+  Route.resource('messages', 'MessageControllr').apiOnly().except(['update']);
 }).middleware(['auth']);

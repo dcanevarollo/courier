@@ -39,6 +39,9 @@ export default class Message extends BaseModel {
   @column()
   public isStarred: boolean;
 
+  @column()
+  public content: string;
+
   @column.dateTime({
     autoCreate: true,
     serialize: (value?: DateTime) => {
@@ -50,6 +53,12 @@ export default class Message extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true, serializeAs: null })
   public updatedAt: DateTime;
+
+  @column.dateTime()
+  public receivedAt: DateTime;
+
+  @column.dateTime()
+  public readAt: DateTime;
 
   @hasOne(() => File)
   public file: HasOne<typeof File>;
