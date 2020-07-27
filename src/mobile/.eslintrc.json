@@ -1,45 +1,38 @@
 {
-    "env": {
-        "es2020": true
+  "env": {
+    "es2020": true
+  },
+  "extends": ["airbnb", "prettier", "prettier/react"],
+  "globals": {
+    "Atomics": "readonly",
+    "SharedArrayBuffer": "readonly",
+    "__DEV__": "readonly"
+  },
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
     },
-    "extends": [
-        "airbnb",
-        "prettier",
-        "prettier/react"
+    "ecmaVersion": 11,
+    "sourceType": "module"
+  },
+  "plugins": ["react", "prettier"],
+  "rules": {
+    "prettier/prettier": "error",
+    "camelcase": "off",
+    "no-nested-ternary": "off",
+    "no-param-reassign": "off",
+    "import/prefer-default-export": "off",
+    "react/jsx-filename-extension": [
+      "warn",
+      {
+        "extensions": [".jsx", ".js"]
+      }
     ],
-    "globals": {
-        "Atomics": "readonly",
-        "SharedArrayBuffer": "readonly",
-        "__DEV__": "readonly"
-    },
-    "parser": "babel-eslint",
-    "parserOptions": {
-        "ecmaFeatures": {
-            "jsx": true
-        },
-        "ecmaVersion": 11,
-        "sourceType": "module"
-    },
-    "plugins": [
-        "react",
-        "prettier"
-    ],
-    "rules": {
-        "prettier/prettier": "error",
-        "camelcase": "off",
-        "no-nested-ternary": "off",
-        "no-param-reassign": "off",
-        "import/prefer-default-export": "off",
-        "react/jsx-filename-extension": [
-            "warn",
-            {
-              "extensions": [".jsx", ".js"]
-            }
-        ],
-        "react/state-in-constructor": "off",
-        "react/static-property-placement": "off",
-        "react/jsx-props-no-spreading": "off",
-        "react/style-prop-object": "off",
-        "react/prop-types": "off"
-    }
+    "react/state-in-constructor": "off",
+    "react/static-property-placement": "off",
+    "react/jsx-props-no-spreading": "off",
+    "react/style-prop-object": "off",
+    "react/prop-types": "off"
+  }
 }

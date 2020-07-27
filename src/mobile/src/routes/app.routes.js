@@ -7,7 +7,7 @@ const AppStack = createStackNavigator();
 
 export default function AuthRoutes() {
   return (
-    <AppStack.Navigator headerMode="none">
+    <AppStack.Navigator>
       <AppStack.Screen name="Conversations" component={Conversations} />
     </AppStack.Navigator>
   );

@@ -14,13 +14,7 @@ export default class AuthController {
 
     const { user } = auth;
 
-    await user?.preload((query) => {
-      query
-        .preload('conversations', (conversation) =>
-          conversation.preload('receiver'),
-        )
-        .preload('picture');
-    });
+    await user?.preload('picture');
 
     return response.accepted({ user, token });
   }

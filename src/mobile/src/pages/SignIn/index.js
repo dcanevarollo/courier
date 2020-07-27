@@ -3,6 +3,8 @@ import { View, TouchableOpacity } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { ValidationError } from 'yup';
 
+import { useAuth } from '../../contexts/auth';
+
 import validator from '../../validators/signIn';
 
 import LineInput, { MaskedInput } from '../../components/LineInput';
@@ -22,13 +24,15 @@ import {
 export default function SignIn({ navigation }) {
   const formRef = useRef(null);
 
+  const { signIn } = useAuth();
+
   async function handleSubmit(data) {
     try {
       await validator.validate(data, { abortEarly: false });
 
       formRef.current.setErrors({});
 
-      // TODO : dispatch API request
+      signIn(data);
     } catch (error) {
       if (error instanceof ValidationError) {
         const errors = {};
@@ -47,7 +51,7 @@ export default function SignIn({ navigation }) {
       <StatusBar style="dark" />
 
       <View>
-        <PageTitle>Sign Up</PageTitle>
+        <PageTitle>Sign In</PageTitle>
         <PageSubtitle>
           Please, type your phone number and your password to access the app.
         </PageSubtitle>

@@ -3,9 +3,7 @@
     "name": "Courier",
     "slug": "courier",
     "version": "1.0.0",
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "splash": {
       "image": "./assets/splash.png"
     },

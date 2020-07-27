@@ -5,11 +5,13 @@
     "ios": "react-native run-ios",
     "web": "expo start --web",
     "start": "react-native start",
-    "test": "jest"
+    "test": "jest",
+    "prettier:write": "yarn prettier --write **/*.{js,jsx,ts,tsx,json} && yarn prettier --write *.{js,txt,ts,tsx,json}"
   },
   "dependencies": {
     "@expo-google-fonts/source-sans-pro": "^0.1.0",
     "@expo/vector-icons": "^10.0.0",
+    "@react-native-community/async-storage": "~1.11.0",
     "@react-native-community/masked-view": "0.1.10",
     "@react-native-community/picker": "1.6.0",
     "@react-navigation/native": "^5.7.1",

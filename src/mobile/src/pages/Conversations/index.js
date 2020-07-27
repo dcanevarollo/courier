@@ -1,10 +1,20 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, TouchableOpacity, Text } from 'react-native';
+
+import { useAuth } from '../../contexts/auth';
 
 export default function Conversations() {
+  const { signOut } = useAuth();
+
+  function handleLogout() {
+    signOut();
+  }
+
   return (
     <View>
-      <Text>Conversations</Text>
+      <TouchableOpacity onPress={handleLogout}>
+        <Text>Logout</Text>
+      </TouchableOpacity>
     </View>
   );
 }
