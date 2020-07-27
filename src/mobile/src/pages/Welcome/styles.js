@@ -31,3 +31,25 @@ export const Salutation = styled(Regular)`
   line-height: 25px;
   color: white;
 `;
+
+export const ActionsContainer = styled.View`
+  align-items: center;
+`;
+
+export const Row = styled.View`
+  flex-direction: row;
+  margin-top: 10px;
+`;
+
+export const BodyText = styled(Regular)`
+  font-size: 16px;
+  line-height: 20px;
+  color: white;
+`;
+
+export const SignUpLink = styled(SemiBold)`
+  font-size: 16px;
+  line-height: 20px;
+  color: white;
+  margin-left: 6px;
+`;

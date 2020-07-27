@@ -9,7 +9,7 @@ import {
 } from '@expo-google-fonts/source-sans-pro';
 import { NavigationContainer } from '@react-navigation/native';
 
-import Routes from './Routes';
+import Routes from './routes';
 
 // eslint-disable-next-line no-console
 console.disableYellowBox = true;

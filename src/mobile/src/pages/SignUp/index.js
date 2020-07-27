@@ -72,7 +72,7 @@ export default function SignUp({ navigation }) {
       }
       case 1: {
         setSubtitle(
-          'What is your name? If you like, tell me a little about you...'
+          'Type your name and a password to access the app. If you like, tell me a little about you too...'
         );
         break;
       }
@@ -168,7 +168,7 @@ export default function SignUp({ navigation }) {
 
       <View>
         <PageTitle>Sign Up</PageTitle>
-        <PageSubtitle>{subtitle}</PageSubtitle>
+        <PageSubtitle step={step}>{subtitle}</PageSubtitle>
       </View>
 
       <FormContainer>
@@ -196,7 +196,7 @@ export default function SignUp({ navigation }) {
                   editable={false}
                 />
                 <MaskedInput
-                  name="phone_number"
+                  name="phone"
                   width="70%"
                   placeholder="Phone number"
                   type="cel-phone"
@@ -208,6 +208,7 @@ export default function SignUp({ navigation }) {
           ) : step === 1 ? (
             <>
               <LineInput name="name" label="Name" />
+              <LineInput name="password" label="Password" secureTextEntry />
               <LineInput name="about" label="About me" />
             </>
           ) : (
