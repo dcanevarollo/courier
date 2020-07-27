@@ -1,9 +1,11 @@
 import React from 'react';
-import { View, TouchableOpacity, Text } from 'react-native';
+import { TouchableOpacity, Text } from 'react-native';
 
 import { useAuth } from '../../contexts/auth';
 
-export default function Conversations() {
+import { Container } from './styles';
+
+export default function Chats() {
   const { signOut } = useAuth();
 
   function handleLogout() {
@@ -11,10 +13,10 @@ export default function Conversations() {
   }
 
   return (
-    <View>
+    <Container>
       <TouchableOpacity onPress={handleLogout}>
         <Text>Logout</Text>
       </TouchableOpacity>
-    </View>
+    </Container>
   );
 }
