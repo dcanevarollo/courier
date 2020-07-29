@@ -76,7 +76,7 @@ export const PictureBorder = styled(LinearGradient)`
   align-items: center;
 `;
 
-export const Picture = styled.ImageBackground`
+export const Picture = styled.Image`
   width: 196px;
   height: 196px;
   background: white;

@@ -8,6 +8,8 @@ import Constants from 'expo-constants';
 import { Picker } from '@react-native-community/picker';
 import { ValidationError } from 'yup';
 
+import api from '../../services/api';
+
 import countriesJSON from '../../utils/countries.json';
 
 import {
@@ -160,7 +162,30 @@ export default function SignUp({ navigation }) {
     } else formRef.current.submitForm();
   }
 
-  async function handleSubmit() {}
+  async function handleSubmit() {
+    try {
+      const response = await api.post('/users', data);
+
+      const uri = Constants.platform.ios
+        ? picture
+        : picture.replace('file:///', 'file:/');
+
+      const userId = response.data;
+
+      const formData = new FormData();
+      formData.append('file', { uri, type: 'image/jpeg', name: 'avatar' });
+
+      await api.post('/files', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+        params: { entity: 'user', id: userId },
+      });
+
+      navigation.navigate('SignIn');
+    } catch (error) {
+      if (error.response) console.error(error.response.data);
+      else console.log(error);
+    }
+  }
 
   return (
     <Container>
@@ -222,15 +247,11 @@ export default function SignUp({ navigation }) {
                   activeOpacity={0.5}
                   onPress={handleChoosePicture}
                 >
-                  <Picture source={{ uri: picture }}>
-                    {!picture && (
-                      <Icon
-                        name="camera"
-                        size={60}
-                        color={colors.primaryBlue}
-                      />
-                    )}
-                  </Picture>
+                  {!picture ? (
+                    <Icon name="camera" size={60} color={colors.primaryBlue} />
+                  ) : (
+                    <Picture source={{ uri: picture }} />
+                  )}
                 </TouchableOpacity>
               </PictureBorder>
             </>
@@ -246,7 +267,7 @@ export default function SignUp({ navigation }) {
           <ControlLink>Back</ControlLink>
         </TouchableOpacity>
         <TouchableOpacity
-          activeOpacity={0.9}
+          activeOpacity={0.8}
           onPress={() => handleStepChange('forward')}
         >
           <ControlLink advance>{step < 2 ? 'Next' : 'Done!'}</ControlLink>

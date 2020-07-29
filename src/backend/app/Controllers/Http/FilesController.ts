@@ -2,12 +2,18 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
 import Application from '@ioc:Adonis/Core/Application';
 import User from 'App/Models/User';
 import Message from 'App/Models/Message';
-import FileValidator from 'App/Validators/FileValidator';
 import File from 'App/Models/File';
 
 export default class FilesController {
   public async store({ request, response }: HttpContextContract) {
-    const { file } = await request.validate(FileValidator);
+    const file = request.file('file', {
+      size: '5mb',
+      extnames: ['jpg', 'png', 'jpeg', 'JPEG'],
+    });
+
+    if (!file) return response.badRequest('Please, provide a valid file');
+
+    if (file.hasErrors) return file.errors;
 
     const { entity, id } = request.get();
 
