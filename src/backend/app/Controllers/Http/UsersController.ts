@@ -7,10 +7,6 @@ export default class UsersController {
   public async store({ request, response }: HttpContextContract) {
     const data = await request.validate(UserValidator);
 
-    const { dial_code: dial } = request.post();
-
-    data.phone = `${dial} ${data.phone}`;
-
     const phoneSlug = slugify(data.phone);
 
     const user = await User.create({ ...data, phoneSlug });

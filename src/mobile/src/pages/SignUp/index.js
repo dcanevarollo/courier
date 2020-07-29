@@ -164,6 +164,12 @@ export default function SignUp({ navigation }) {
 
   async function handleSubmit() {
     try {
+      data.phone = `${data.dial_code} ${data.phone}`;
+
+      console.log(data);
+
+      delete data.dial_code;
+
       const response = await api.post('/users', data);
 
       const uri = Constants.platform.ios
@@ -172,6 +178,7 @@ export default function SignUp({ navigation }) {
 
       const userId = response.data;
 
+      // eslint-disable-next-line no-undef
       const formData = new FormData();
       formData.append('file', { uri, type: 'image/jpeg', name: 'avatar' });
 
@@ -180,7 +187,12 @@ export default function SignUp({ navigation }) {
         params: { entity: 'user', id: userId },
       });
 
-      navigation.navigate('SignIn');
+      formRef.current.reset();
+
+      navigation.reset({
+        index: 1,
+        routes: [{ name: 'Welcome' }, { name: 'SignIn' }],
+      });
     } catch (error) {
       if (error.response) console.error(error.response.data);
       else console.log(error);
