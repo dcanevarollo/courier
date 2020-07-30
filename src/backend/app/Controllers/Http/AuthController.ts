@@ -8,9 +8,7 @@ export default class AuthController {
 
     const phoneSlug = slugify(data.dial_code + data.phone);
 
-    const token = await auth.attempt(phoneSlug, data.password, {
-      expiresIn: '7 days',
-    });
+    const token = await auth.attempt(phoneSlug, data.password);
 
     const { user } = auth;
 

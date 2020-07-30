@@ -14,4 +14,7 @@ Route.group(() => {
   Route.delete('logout', 'AuthController.logout');
   Route.resource('users', 'UsersController').apiOnly().except(['store']);
   Route.resource('messages', 'MessagesController').apiOnly().except(['update']);
+  Route.resource('friends', 'FriendsController')
+    .apiOnly()
+    .only(['store', 'destroy']);
 }).middleware(['auth']);
