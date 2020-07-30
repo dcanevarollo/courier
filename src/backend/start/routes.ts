@@ -13,8 +13,13 @@ Route.resource('files', 'FilesController').apiOnly().only(['store', 'show']);
 Route.group(() => {
   Route.delete('logout', 'AuthController.logout');
   Route.resource('users', 'UsersController').apiOnly().except(['store']);
-  Route.resource('messages', 'MessagesController').apiOnly().except(['update']);
   Route.resource('friends', 'FriendsController')
     .apiOnly()
     .only(['store', 'destroy']);
+  Route.resource('messages', 'MessagesController')
+    .apiOnly()
+    .except(['show', 'update']);
+  Route.resource('conversations', 'ConversationsController')
+    .apiOnly()
+    .only(['index', 'destroy']);
 }).middleware(['auth']);

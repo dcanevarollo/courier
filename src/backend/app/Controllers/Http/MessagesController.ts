@@ -1,7 +1,21 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
 import MessageValidator from 'App/Validators/MessageValidator';
+import Message from 'App/Models/Message';
 
 export default class MessagesController {
+  public async index({ request, response }: HttpContextContract) {
+    const { conversation_id: conversationId, page } = request.get();
+
+    const messages = await Message.query()
+      .preload('file')
+      .preload('responseTo')
+      .where({ conversation_id: conversationId })
+      .orderBy('created_at')
+      .paginate(page, 20);
+
+    return response.json(messages);
+  }
+
   public async store({ request, response, auth }: HttpContextContract) {
     const data = await request.validate(MessageValidator);
 
@@ -25,5 +39,15 @@ export default class MessagesController {
     });
 
     return response.created(message?.id);
+  }
+
+  public async destroy({ params, response }: HttpContextContract) {
+    const { id } = params;
+
+    const message = await Message.findOrFail(id);
+
+    await message.delete();
+
+    return response.ok(null);
   }
 }
