@@ -1,5 +1,4 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Feather as Icon } from '@expo/vector-icons';
@@ -13,68 +12,9 @@ import Settings from '../pages/Settings';
 
 import colors from '../styles/colors';
 
-const styles = StyleSheet.create({
-  box: {
-    borderStyle: 'solid',
-    elevation: 0,
-    shadowOpacity: 0,
-    shadowRadius: 0,
-    shadowOffset: { width: 0, height: 0 },
-  },
-  header: {
-    borderBottomWidth: 1,
-    borderBottomColor: colors.lightGray,
-  },
-  headerTitle: {
-    fontFamily: 'SourceSansPro_700Bold',
-    fontSize: 28,
-    lineHeight: 35,
-  },
-  headerRightContainer: {
-    paddingRight: 20,
-  },
-  tabBar: {
-    height: 80,
-    paddingHorizontal: '8%',
-    borderTopWidth: 1,
-    borderTopColor: colors.lightGray,
-  },
-});
-
-const ChatsStack = createStackNavigator();
-
-function ChatsStackScreen() {
-  return (
-    <ChatProvider>
-      <ChatsStack.Navigator
-        screenOptions={{
-          headerStyle: [styles.box, styles.header],
-          headerTintColor: colors.black,
-          headerTitleStyle: styles.headerTitle,
-          headerBackTitleVisible: false,
-        }}
-      >
-        <ChatsStack.Screen
-          name="Chats"
-          component={Chats}
-          options={{
-            headerRightContainerStyle: styles.headerRightContainer,
-            headerRight: () => (
-              <TouchableOpacity activeOpacity={0.5}>
-                <Icon name="user-plus" size={28} color={colors.primaryBlue} />
-              </TouchableOpacity>
-            ),
-          }}
-        />
-        <ChatsStack.Screen name="Conversation" component={Conversation} />
-      </ChatsStack.Navigator>
-    </ChatProvider>
-  );
-}
-
 const Tab = createBottomTabNavigator();
 
-export default function AppRoutes() {
+function HomeTabs() {
   return (
     <Tab.Navigator
       initialRouteName="Chats"
@@ -93,12 +33,35 @@ export default function AppRoutes() {
         activeTintColor: colors.primaryBlue,
         inactiveTintColor: colors.gray,
         showLabel: false,
-        style: [styles.box, styles.tabBar],
+        style: {
+          height: 80,
+          paddingHorizontal: '8%',
+          borderTopWidth: 1,
+          borderTopColor: colors.lightGray,
+          borderStyle: 'solid',
+          elevation: 0,
+          shadowOpacity: 0,
+          shadowRadius: 0,
+          shadowOffset: { width: 0, height: 0 },
+        },
       }}
     >
       <Tab.Screen name="Calls" component={Calls} />
-      <Tab.Screen name="Chats" component={ChatsStackScreen} />
+      <Tab.Screen name="Chats" component={Chats} />
       <Tab.Screen name="Settings" component={Settings} />
     </Tab.Navigator>
+  );
+}
+
+const Stack = createStackNavigator();
+
+export default function AppRoutes() {
+  return (
+    <ChatProvider>
+      <Stack.Navigator headerMode="none">
+        <Stack.Screen name="Home" component={HomeTabs} />
+        <Stack.Screen name="Conversation" component={Conversation} />
+      </Stack.Navigator>
+    </ChatProvider>
   );
 }

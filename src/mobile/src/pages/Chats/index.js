@@ -4,6 +4,7 @@ import { StatusBar } from 'expo-status-bar';
 
 import { useChats } from '../../contexts/chats';
 
+import Header from '../../components/Header';
 import Avatar from '../../components/Avatar';
 
 import {
@@ -35,6 +36,8 @@ export default function Chats({ navigation }) {
   return (
     <Container>
       <StatusBar style="dark" />
+
+      <Header />
 
       {loading ? (
         <ActivityIndicator size="large" color={colors.primaryBlue} />
