@@ -1,4 +1,5 @@
 import React from 'react';
+import { TouchableOpacity } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 
 import Avatar from '../../components/Avatar';
@@ -6,7 +7,6 @@ import Avatar from '../../components/Avatar';
 import {
   Container,
   ChatBox,
-  ChatInfo,
   PreviewContainer,
   Name,
   Preview,
@@ -22,40 +22,44 @@ export default function Chats() {
     <Container>
       <StatusBar style="dark" />
 
-      <ChatBox>
-        <Avatar
-          uri="https://avatars2.githubusercontent.com/u/2254731?s=400&u=0ba16a79456c2f250e7579cb388fa18c5c2d7d65&v=4"
-          size={70}
-          marginRight="20px"
-          online
-        />
-        <PreviewContainer>
-          <Name>Diego Rocketseat</Name>
-          <Preview numberOfLines={2}>Fala deeeev...</Preview>
-        </PreviewContainer>
+      <TouchableOpacity activeOpacity={0.8} onPress={() => {}}>
+        <ChatBox>
+          <Avatar
+            uri="https://avatars2.githubusercontent.com/u/2254731?s=400&u=0ba16a79456c2f250e7579cb388fa18c5c2d7d65&v=4"
+            size={70}
+            marginRight="20px"
+            online
+          />
+          <PreviewContainer>
+            <Name>Diego Rocketseat</Name>
+            <Preview numberOfLines={2}>Fala deeeev...</Preview>
+          </PreviewContainer>
 
-        <MetadataContainer>
-          <Timing>09:23</Timing>
-        </MetadataContainer>
-      </ChatBox>
+          <MetadataContainer>
+            <Timing>09:23</Timing>
+          </MetadataContainer>
+        </ChatBox>
+      </TouchableOpacity>
 
-      <ChatBox>
-        <Avatar size={70} marginRight="20px" />
-        <PreviewContainer>
-          <Name>Elon Musk</Name>
-          <Preview numberOfLines={2}>
-            Dude, I really hope that this shit don&apos;t shake our
-            relationship, ok? You&apos;re very important for me, u know that
-          </Preview>
-        </PreviewContainer>
+      <TouchableOpacity activeOpacity={0.8} onPress={() => {}}>
+        <ChatBox>
+          <Avatar size={70} marginRight="20px" />
+          <PreviewContainer>
+            <Name>Elon Musk</Name>
+            <Preview numberOfLines={2}>
+              Dude, I really hope that this shit don&apos;t shake our
+              relationship, ok? You&apos;re very important for me, u know that
+            </Preview>
+          </PreviewContainer>
 
-        <MetadataContainer>
-          <Timing>11:31</Timing>
-          <UnreadContainer colors={colors.mainGradient}>
-            <UnreadCounter>2</UnreadCounter>
-          </UnreadContainer>
-        </MetadataContainer>
-      </ChatBox>
+          <MetadataContainer>
+            <Timing>11:31</Timing>
+            <UnreadContainer colors={colors.mainGradient}>
+              <UnreadCounter>2</UnreadCounter>
+            </UnreadContainer>
+          </MetadataContainer>
+        </ChatBox>
+      </TouchableOpacity>
     </Container>
   );
 }
