@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { Feather as Icon } from '@expo/vector-icons';
 
 import { useChats } from '../../contexts/chats';
