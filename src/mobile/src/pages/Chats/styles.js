@@ -8,6 +8,7 @@ import colors from '../../styles/colors';
 export const Container = styled(SafeAreaView)`
   flex: 1;
   background: white;
+  align-items: center;
 `;
 
 export const ChatBox = styled.View`

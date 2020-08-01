@@ -5,6 +5,7 @@ import api from '../services/api';
 
 const AuthContext = createContext({});
 
+// TODO : handle errors in API requests
 export function AuthProvider({ children }) {
   const [authUser, setAuthUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -30,7 +31,6 @@ export function AuthProvider({ children }) {
     loadStoragedData();
   }, []);
 
-  // TODO : handle errors
   async function signIn(data) {
     try {
       const response = await api.post('/login', data);

@@ -1,6 +1,8 @@
-import React from 'react';
-import { TouchableOpacity } from 'react-native';
+import React, { useEffect } from 'react';
+import { TouchableOpacity, FlatList, ActivityIndicator } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
+
+import { useChats } from '../../contexts/chats';
 
 import Avatar from '../../components/Avatar';
 
@@ -17,49 +19,70 @@ import {
 } from './styles';
 import colors from '../../styles/colors';
 
-export default function Chats() {
+export default function Chats({ navigation }) {
+  const { chats, loading, fetchChats, setCurrentChat } = useChats();
+
+  useEffect(() => {
+    fetchChats();
+  }, []);
+
+  function handleChatSelection(chat) {
+    setCurrentChat(chat);
+
+    navigation.navigate('Conversation');
+  }
+
   return (
     <Container>
       <StatusBar style="dark" />
 
-      <TouchableOpacity activeOpacity={0.8} onPress={() => {}}>
-        <ChatBox>
-          <Avatar
-            uri="https://avatars2.githubusercontent.com/u/2254731?s=400&u=0ba16a79456c2f250e7579cb388fa18c5c2d7d65&v=4"
-            size={70}
-            marginRight="20px"
-            online
-          />
-          <PreviewContainer>
-            <Name>Diego Rocketseat</Name>
-            <Preview numberOfLines={2}>Fala deeeev...</Preview>
-          </PreviewContainer>
+      {loading ? (
+        <ActivityIndicator size="large" color={colors.primaryBlue} />
+      ) : (
+        <FlatList
+          style={{ width: '100%' }}
+          data={chats}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => {
+            const lastMessage = item.messages[item.messages.length - 1];
 
-          <MetadataContainer>
-            <Timing>09:23</Timing>
-          </MetadataContainer>
-        </ChatBox>
-      </TouchableOpacity>
+            const unreadNumber = item.messages.reduce((total, message) => {
+              if (!message.reat_at) return total + 1;
 
-      <TouchableOpacity activeOpacity={0.8} onPress={() => {}}>
-        <ChatBox>
-          <Avatar size={70} marginRight="20px" />
-          <PreviewContainer>
-            <Name>Elon Musk</Name>
-            <Preview numberOfLines={2}>
-              Dude, I really hope that this shit don&apos;t shake our
-              relationship, ok? You&apos;re very important for me, u know that
-            </Preview>
-          </PreviewContainer>
+              return total;
+            }, 0);
 
-          <MetadataContainer>
-            <Timing>11:31</Timing>
-            <UnreadContainer colors={colors.mainGradient}>
-              <UnreadCounter>2</UnreadCounter>
-            </UnreadContainer>
-          </MetadataContainer>
-        </ChatBox>
-      </TouchableOpacity>
+            return (
+              <TouchableOpacity
+                activeOpacity={0.8}
+                onPress={() => handleChatSelection(item)}
+              >
+                <ChatBox>
+                  <Avatar
+                    uri={item.receiver.picture?.url}
+                    size={70}
+                    marginRight="20px"
+                    online
+                  />
+                  <PreviewContainer>
+                    <Name numberOfLines={1}>{item.receiver.name}</Name>
+                    <Preview numberOfLines={2}>{lastMessage.content}</Preview>
+                  </PreviewContainer>
+
+                  <MetadataContainer>
+                    <Timing>{lastMessage.sent_time}</Timing>
+                    {unreadNumber > 0 && (
+                      <UnreadContainer colors={colors.mainGradient}>
+                        <UnreadCounter>{unreadNumber}</UnreadCounter>
+                      </UnreadContainer>
+                    )}
+                  </MetadataContainer>
+                </ChatBox>
+              </TouchableOpacity>
+            );
+          }}
+        />
+      )}
     </Container>
   );
 }

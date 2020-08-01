@@ -1,10 +1,16 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { Text } from 'react-native';
+
+import { useChats } from '../../contexts/chats';
+
+import { Container } from './styles';
 
 export default function Conversation() {
+  const { currentChat } = useChats();
+
   return (
-    <View>
-      <Text>Conversation</Text>
-    </View>
+    <Container>
+      <Text>{JSON.stringify(currentChat)}</Text>
+    </Container>
   );
 }

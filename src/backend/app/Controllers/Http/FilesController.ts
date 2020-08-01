@@ -8,12 +8,12 @@ export default class FilesController {
   public async store({ request, response }: HttpContextContract) {
     const file = request.file('file', {
       size: '5mb',
-      extnames: ['jpg', 'png', 'jpeg', 'JPEG'],
+      extnames: ['jpg', 'png', 'jpeg', 'JPEG', 'JPG'],
     });
 
     if (!file) return response.badRequest('Please, provide a valid file');
 
-    if (file.hasErrors) return file.errors;
+    if (file.hasErrors) return response.badRequest(file.errors);
 
     const { entity, id } = request.get();
 

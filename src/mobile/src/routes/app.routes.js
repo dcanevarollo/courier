@@ -4,6 +4,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Feather as Icon } from '@expo/vector-icons';
 
+import { ChatProvider } from '../contexts/chats';
+
 import Calls from '../pages/Calls';
 import Chats from '../pages/Chats';
 import Conversation from '../pages/Conversation';
@@ -43,23 +45,30 @@ const ChatsStack = createStackNavigator();
 
 function ChatsStackScreen() {
   return (
-    <ChatsStack.Navigator
-      screenOptions={{
-        headerStyle: [styles.box, styles.header],
-        headerTintColor: colors.black,
-        headerTitleStyle: styles.headerTitle,
-        headerBackTitleVisible: false,
-        headerRightContainerStyle: styles.headerRightContainer,
-        headerRight: () => (
-          <TouchableOpacity activeOpacity={0.5}>
-            <Icon name="user-plus" size={28} color={colors.primaryBlue} />
-          </TouchableOpacity>
-        ),
-      }}
-    >
-      <ChatsStack.Screen name="Chats" component={Chats} />
-      <ChatsStack.Screen name="Conversation" component={Conversation} />
-    </ChatsStack.Navigator>
+    <ChatProvider>
+      <ChatsStack.Navigator
+        screenOptions={{
+          headerStyle: [styles.box, styles.header],
+          headerTintColor: colors.black,
+          headerTitleStyle: styles.headerTitle,
+          headerBackTitleVisible: false,
+        }}
+      >
+        <ChatsStack.Screen
+          name="Chats"
+          component={Chats}
+          options={{
+            headerRightContainerStyle: styles.headerRightContainer,
+            headerRight: () => (
+              <TouchableOpacity activeOpacity={0.5}>
+                <Icon name="user-plus" size={28} color={colors.primaryBlue} />
+              </TouchableOpacity>
+            ),
+          }}
+        />
+        <ChatsStack.Screen name="Conversation" component={Conversation} />
+      </ChatsStack.Navigator>
+    </ChatProvider>
   );
 }
 
