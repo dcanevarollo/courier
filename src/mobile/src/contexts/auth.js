@@ -32,26 +32,34 @@ export function AuthProvider({ children }) {
 
   // TODO : handle errors
   async function signIn(data) {
-    const response = await api.post('/login', data);
+    try {
+      const response = await api.post('/login', data);
 
-    const { token, user } = response.data;
+      const { token, user } = response.data;
 
-    setAuthUser(user);
+      setAuthUser(user);
 
-    api.defaults.headers.Authorization = `Bearer ${token}`;
+      api.defaults.headers.Authorization = `Bearer ${token}`;
 
-    await AsyncStorage.multiSet([
-      ['@courier/access-token', token.token],
-      ['@courier/auth-user', JSON.stringify(user)],
-    ]);
+      await AsyncStorage.multiSet([
+        ['@courier/access-token', token.token],
+        ['@courier/auth-user', JSON.stringify(user)],
+      ]);
+    } catch (error) {
+      console.error(error.response.data);
+    }
   }
 
   async function signOut() {
-    await api.delete('/logout');
+    try {
+      await api.delete('/logout');
 
-    await AsyncStorage.clear();
+      await AsyncStorage.clear();
 
-    setAuthUser(null);
+      setAuthUser(null);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   return (
