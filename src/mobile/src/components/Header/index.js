@@ -8,17 +8,24 @@ import Avatar from '../Avatar';
 import { Container, LeftSide, Title } from './styles';
 import colors from '../../styles/colors';
 
-export default function Header({ title, figure, rightSide = true }) {
+export default function Header({
+  title,
+  figure,
+  showIcon = false,
+  showAvatar = false,
+}) {
   const route = useRoute();
 
   return (
     <Container>
       <LeftSide>
-        {figure && <Avatar uri={figure} size={40} marginRight="10px" />}
-        <Title numberOfLines={1}>{title || route.name}</Title>
+        {showAvatar && <Avatar uri={figure} size={40} marginRight="10px" />}
+        <Title numberOfLines={1} fontSize={showAvatar ? '20px' : '28px'}>
+          {title || route.name}
+        </Title>
       </LeftSide>
 
-      {rightSide && (
+      {showIcon && (
         <TouchableOpacity activeOpacity={0.5}>
           <Icon name="user-plus" size={28} color={colors.primaryBlue} />
         </TouchableOpacity>

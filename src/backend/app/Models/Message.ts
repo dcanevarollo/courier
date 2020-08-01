@@ -6,6 +6,7 @@ import {
   BelongsTo,
   hasOne,
   HasOne,
+  computed,
 } from '@ioc:Adonis/Lucid/Orm';
 import Conversation from './Conversation';
 import User from './User';
@@ -21,7 +22,7 @@ export default class Message extends BaseModel {
   @belongsTo(() => Conversation)
   public conversation: BelongsTo<typeof Conversation>;
 
-  @column({ serializeAs: null })
+  @column({ serializeAs: 'sender_id' })
   public userId: string;
 
   @belongsTo(() => User)
@@ -62,4 +63,9 @@ export default class Message extends BaseModel {
 
   @hasOne(() => File)
   public file: HasOne<typeof File>;
+
+  @computed({ serializeAs: 'sent_day' })
+  public get sentDay() {
+    return this.createdAt.toLocaleString(DateTime.DATE_FULL);
+  }
 }

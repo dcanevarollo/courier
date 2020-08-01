@@ -3,6 +3,7 @@ import { TouchableOpacity, FlatList, ActivityIndicator } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 
 import { useChats } from '../../contexts/chats';
+import { useAuth } from '../../contexts/auth';
 
 import Header from '../../components/Header';
 import Avatar from '../../components/Avatar';
@@ -22,6 +23,7 @@ import colors from '../../styles/colors';
 
 export default function Chats({ navigation }) {
   const { chats, loading, fetchChats, setCurrentChat } = useChats();
+  const { user } = useAuth();
 
   useEffect(() => {
     fetchChats();
@@ -37,7 +39,7 @@ export default function Chats({ navigation }) {
     <Container>
       <StatusBar style="dark" />
 
-      <Header />
+      <Header showIcon />
 
       {loading ? (
         <ActivityIndicator size="large" color={colors.primaryBlue} />
@@ -50,7 +52,8 @@ export default function Chats({ navigation }) {
             const lastMessage = item.messages[item.messages.length - 1];
 
             const unreadNumber = item.messages.reduce((total, message) => {
-              if (!message.reat_at) return total + 1;
+              if (message.sender_id !== user.id && !message.reat_at)
+                return total + 1;
 
               return total;
             }, 0);
@@ -75,7 +78,11 @@ export default function Chats({ navigation }) {
                   <MetadataContainer>
                     <Timing>{lastMessage.sent_time}</Timing>
                     {unreadNumber > 0 && (
-                      <UnreadContainer colors={colors.mainGradient}>
+                      <UnreadContainer
+                        colors={colors.mainGradient}
+                        start={{ x: 0, y: 0 }}
+                        end={{ x: 1, y: 1 }}
+                      >
                         <UnreadCounter>{unreadNumber}</UnreadCounter>
                       </UnreadContainer>
                     )}

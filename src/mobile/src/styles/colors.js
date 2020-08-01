@@ -2,7 +2,10 @@ const colors = {
   // Primary
   primaryGreen: '#5CE27F',
   primaryBlue: '#5CABE2',
+
+  // Gradients
   mainGradient: ['#5CE27F', '#5CABE2'],
+  grayGradient: ['#E5E5E5', '#E5E5E5'],
 
   // Actions
   yellow: '#FFE12D',

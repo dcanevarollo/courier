@@ -22,7 +22,7 @@ export const LeftSide = styled.View`
 `;
 
 export const Title = styled(Bold)`
-  font-size: 28px;
+  font-size: ${(props) => props.fontSize};
   line-height: 35px;
   color: ${colors.black};
 `;

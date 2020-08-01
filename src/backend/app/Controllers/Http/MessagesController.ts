@@ -38,7 +38,7 @@ export default class MessagesController {
       content: data.content,
     });
 
-    return response.created(message?.id);
+    return response.created(message);
   }
 
   public async destroy({ params, response }: HttpContextContract) {

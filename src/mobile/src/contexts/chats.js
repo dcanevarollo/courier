@@ -1,6 +1,7 @@
 import React, { createContext, useState, useContext } from 'react';
 
 import api from '../services/api';
+import { findAndReplace } from '../utils/iterators';
 
 const ChatContext = createContext({});
 
@@ -24,9 +25,25 @@ export function ChatProvider({ children }) {
     }
   }
 
+  function addMessageToChat(activeChat, newMessage) {
+    setCurrentChat({
+      ...currentChat,
+      messages: [...currentChat.messages, newMessage],
+    });
+
+    setChats(findAndReplace(chats, activeChat, currentChat));
+  }
+
   return (
     <ChatContext.Provider
-      value={{ chats, currentChat, loading, fetchChats, setCurrentChat }}
+      value={{
+        chats,
+        currentChat,
+        loading,
+        fetchChats,
+        setCurrentChat,
+        addMessageToChat,
+      }}
     >
       {children}
     </ChatContext.Provider>
