@@ -1,7 +1,8 @@
+# Node modules
 node_modules
-build
-coverage
-.vscode
-.DS_STORE
-.env
+
+# Adonis directory for storing tmp files
 tmp
+
+# Environment variables, never commit this file
+.env
