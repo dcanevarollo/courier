@@ -5,6 +5,9 @@
 /** @type {import('@adonisjs/lucid/src/Database')} */
 const Database = use('Database');
 
+/** @type {import('@adonisjs/websocket/src/Ws')} */
+const Ws = use('Ws');
+
 /** @type {typeof import('../../Models/Message')} */
 const Message = use('App/Models/Message');
 
@@ -65,8 +68,6 @@ class MessageController {
         transaction
       );
 
-    // TODO : WebSocket implementation
-
     const message = await conversation?.messages().create(
       {
         user_id: user?.id,
@@ -75,6 +76,10 @@ class MessageController {
       },
       transaction
     );
+
+    const chatChannel = Ws.getChannel('chat');
+
+    if (chatChannel) chatChannel.sendMessage(message);
 
     await transaction.commit();
 
