@@ -9,6 +9,7 @@
     "prettier:write": "yarn prettier --write **/*.{js,jsx,ts,tsx,json} && yarn prettier --write *.{js,txt,ts,tsx,json}"
   },
   "dependencies": {
+    "@adonisjs/websocket-client": "^1.0.9",
     "@expo-google-fonts/source-sans-pro": "^0.1.0",
     "@expo/vector-icons": "^10.0.0",
     "@react-native-community/async-storage": "~1.11.0",

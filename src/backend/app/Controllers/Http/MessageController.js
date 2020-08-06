@@ -68,7 +68,7 @@ class MessageController {
         transaction
       );
 
-    const message = await conversation?.messages().create(
+    const message = await conversation.messages().create(
       {
         user_id: user?.id,
         response_id: data.response_to,
@@ -77,9 +77,9 @@ class MessageController {
       transaction
     );
 
-    const chatChannel = Ws.getChannel('chat');
+    const chatChannel = Ws.getChannel('chat:*').topic(conversation.id);
 
-    if (chatChannel) chatChannel.sendMessage(message);
+    if (chatChannel) chatChannel.broadcastToAll('message', message);
 
     await transaction.commit();
 
