@@ -1,7 +1,7 @@
 import Ws from '@adonisjs/websocket-client';
 
-const websocket = Ws('ws://10.0.2.2:3333');
+const ws = Ws('ws://10.0.2.2:3333');
 
-websocket.connect();
+ws.connect();
 
-export default websocket;
+export default ws;

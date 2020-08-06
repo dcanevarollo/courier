@@ -22,7 +22,7 @@ import {
 import colors from '../../styles/colors';
 
 export default function Chats({ navigation }) {
-  const { chats, loading, fetchChats, setCurrentChat } = useChats();
+  const { chats, loading, fetchChats, subscribeToChat } = useChats();
   const { user } = useAuth();
 
   useEffect(() => {
@@ -30,7 +30,7 @@ export default function Chats({ navigation }) {
   }, []);
 
   function handleChatSelection(chat) {
-    setCurrentChat(chat);
+    subscribeToChat(chat);
 
     navigation.navigate('Conversation');
   }

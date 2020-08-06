@@ -1,7 +1,7 @@
 import React, { createContext, useState, useContext } from 'react';
 
 import api from '../services/api';
-import websocket from '../services/websocket';
+import ws from '../services/websocket';
 
 import { findAndReplace } from '../utils/iterators';
 
@@ -36,6 +36,17 @@ export function ChatProvider({ children }) {
     setChats(findAndReplace(chats, activeChat, currentChat));
   }
 
+  function subscribeToChat(chat) {
+    setCurrentChat(chat);
+
+    const chatChannel =
+      ws.getSubscription(`chat:${chat.id}`) || ws.subscribe(`chat:${chat.id}`);
+
+    chatChannel.on('message', (message) => {
+      addMessageToChat(chat, message);
+    });
+  }
+
   return (
     <ChatContext.Provider
       value={{
@@ -43,8 +54,8 @@ export function ChatProvider({ children }) {
         currentChat,
         loading,
         fetchChats,
-        setCurrentChat,
         addMessageToChat,
+        subscribeToChat,
       }}
     >
       {children}
